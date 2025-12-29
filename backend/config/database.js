@@ -1,21 +1,13 @@
-const mysql = require('mysql2');
+// backend/config/database.js
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const pool = mysql.createPool({
+const db = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 3306,
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
+  password: process.env.DB_PASSWORD || 'admin123',
   database: process.env.DB_NAME || 'beauty_parlor',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+  port: process.env.DB_PORT || 3306,
 });
 
-// Promisify for async/await
-const promisePool = pool.promise();
-
-// Export both promise pool and regular pool
-module.exports = promisePool;
-module.exports.pool = pool;
-
+module.exports = db;

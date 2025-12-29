@@ -1,38 +1,64 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:5001/api";
 
-// Configure axios defaults
-axios.defaults.baseURL = API_URL;
-const token = localStorage.getItem("token");
-if (token) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-}
+// Create axios instance
+const api = axios.create({
+  baseURL: API_URL,
+});
+
+// Set up request interceptor to add token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Set up response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Services
-export const getServices = () => axios.get(`${API_URL}/services`);
-export const getService = (id) => axios.get(`${API_URL}/services/${id}`);
+export const getServices = () => api.get("/services");
+export const getService = (id) => api.get(`/services/${id}`);
 
 // Availability
 export const getAvailability = (serviceId, date) => {
   const params = date ? { date } : {};
-  return axios.get(`${API_URL}/availability/service/${serviceId}`, { params });
+  return api.get(`/availability/service/${serviceId}`, { params });
 };
 
 // Bookings
-export const createBooking = (data) => axios.post(`${API_URL}/bookings`, data);
-export const getMyBookings = () => axios.get(`${API_URL}/bookings/my-bookings`);
-export const cancelBooking = (id) => axios.put(`${API_URL}/bookings/${id}/cancel`);
+export const createBooking = (data) => api.post("/bookings", data);
+export const getMyBookings = () => api.get("/bookings/my-bookings");
+export const cancelBooking = (id) => api.put(`/bookings/${id}/cancel`);
 
 // Admin
-export const getDashboard = () => axios.get(`${API_URL}/admin/dashboard`);
-export const getAllAppointments = (params) => axios.get(`${API_URL}/admin/appointments`, { params });
-export const getBookingHistory = () => axios.get(`${API_URL}/admin/booking-history`);
+export const getDashboard = () => api.get("/admin/dashboard");
+export const getAllAppointments = (params) => api.get("/admin/appointments", { params });
+export const getBookingHistory = () => api.get("/admin/booking-history");
 
 // Service management (admin)
-export const createService = (data) => axios.post(`${API_URL}/services`, data);
-export const updateService = (id, data) => axios.put(`${API_URL}/services/${id}`, data);
-export const deleteService = (id) => axios.delete(`${API_URL}/services/${id}`);
+export const createService = (data) => api.post("/services", data);
+export const updateService = (id, data) => api.put(`/services/${id}`, data);
+export const deleteService = (id) => api.delete(`/services/${id}`);
 
 // Set availability (admin)
-export const setAvailability = (data) => axios.post(`${API_URL}/availability`, data);
+export const setAvailability = (data) => api.post("/availability", data);

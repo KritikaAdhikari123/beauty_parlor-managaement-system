@@ -34,19 +34,29 @@ app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Start server
-db.pool.getConnection((err, connection) => {
-  if (err) {
-    console.error('Database connection error:', err);
+async function startServer() {
+  try {
+    // Test database connection using promise pool
+    const connection = await db.getConnection();
+    console.log('Database connected successfully');
+    connection.release();
+    
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+      console.log(`API available at http://localhost:${PORT}/api`);
+    });
+  } catch (err) {
+    console.error('Database connection error:', err.message);
+    console.error('Please ensure:');
+    console.error('1. MySQL server is running');
+    console.error('2. Database "beauty_parlor" exists (run: mysql -u root -p < backend/database/schema.sql)');
+    console.error('3. .env file has correct database credentials');
     process.exit(1);
   }
-  console.log('Database connected successfully');
-  connection.release();
-  
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});
+}
+
+startServer();
 

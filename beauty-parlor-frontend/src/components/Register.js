@@ -40,7 +40,8 @@ function Register() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>Create Account</h2>
+        <h2>✨ Sujita Beauty Parlour</h2>
+        <p style={{textAlign: 'center', color: '#666', marginBottom: '20px'}}>Create your account to book appointments</p>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-group">

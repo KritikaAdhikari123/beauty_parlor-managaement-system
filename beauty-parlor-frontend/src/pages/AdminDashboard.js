@@ -45,7 +45,7 @@ function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
-      <h1>Admin Dashboard</h1>
+      <h1>✨ Sujita Beauty Parlour - Admin Dashboard</h1>
 
       {stats && (
         <div className="stats-grid">

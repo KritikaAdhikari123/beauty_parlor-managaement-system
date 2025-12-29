@@ -18,7 +18,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          Beauty Parlor
+          ✨ Sujita Beauty Parlour
         </Link>
         <div className="nav-links">
           {user.role === "admin" ? (

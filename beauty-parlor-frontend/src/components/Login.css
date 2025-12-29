@@ -3,22 +3,50 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #f5e6f0 0%, #e8d5e8 25%, #d4c4e8 50%, #c8b4e0 75%, #b8a4d8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(214, 51, 132, 0.1) 0%, transparent 70%);
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-30px, -30px) rotate(180deg); }
 }
 
 .login-card {
-  background: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 50px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(214, 51, 132, 0.3);
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .login-card h2 {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
   text-align: center;
-  color: #333;
+  color: #d63384;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .form-group {
@@ -34,10 +62,19 @@
 
 .form-group input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 14px 18px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
   font-size: 16px;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #d63384;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
 }
 
 .register-link {
@@ -47,7 +84,14 @@
 }
 
 .register-link a {
-  color: #1976d2;
+  color: #d63384;
   text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #c2185b;
+  text-decoration: underline;
 }
 

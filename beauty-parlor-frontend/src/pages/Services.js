@@ -33,8 +33,8 @@ function Services() {
   return (
     <div className="services-page">
       <div className="services-header">
-        <h1>Our Services</h1>
-        <p>Choose a service to book an appointment</p>
+        <h1>✨ Our Premium Services</h1>
+        <p>Indulge in luxury and choose a service to book your appointment</p>
       </div>
       <div className="services-grid">
         {services.map((service) => (

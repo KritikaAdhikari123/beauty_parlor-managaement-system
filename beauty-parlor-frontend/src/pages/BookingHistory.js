@@ -50,7 +50,7 @@ function BookingHistory() {
 
   return (
     <div className="booking-history">
-      <h1>My Bookings</h1>
+      <h1>✨ My Bookings</h1>
       {message && <div className="success-message">{message}</div>}
       {error && <div className="error-message">{error}</div>}
 

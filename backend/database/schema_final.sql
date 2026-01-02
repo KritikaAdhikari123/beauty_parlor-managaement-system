@@ -19,12 +19,12 @@ ADD COLUMN image_url VARCHAR(500) NULL AFTER bio;
 UPDATE bookings SET status = 'PENDING' WHERE status = 'confirmed';
 
 -- Insert service images (using placeholder URLs - replace with actual images)
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1560869713-7d0a0a3e4e5f?w=400' WHERE name = 'Haircut';
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400' WHERE name = 'Hair Color';
+UPDATE services SET image_url = 'https://plus.unsplash.com/premium_photo-1664048713117-cee94e5048a0?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Haircut';
+UPDATE services SET image_url = 'https://images.unsplash.com/photo-1707979577466-2d6109c68a45?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Hair Color';
 UPDATE services SET image_url = 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=400' WHERE name = 'Facial';
 UPDATE services SET image_url = 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400' WHERE name = 'Manicure';
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=400' WHERE name = 'Pedicure';
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=400' WHERE name = 'Hair Spa';
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=400' WHERE name = 'Bridal Makeup';
-UPDATE services SET image_url = 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=400' WHERE name = 'Threading';
+UPDATE services SET image_url = 'https://plus.unsplash.com/premium_photo-1680348266597-6d89a08d12d7?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Pedicure';
+UPDATE services SET image_url = 'https://plus.unsplash.com/premium_photo-1664475130052-f58aaf58854e?q=80&w=1744&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Hair Spa';
+UPDATE services SET image_url = 'https://plus.unsplash.com/premium_photo-1724762178439-1f93ad3f3cb6?q=80&w=1608&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Bridal Makeup';
+UPDATE services SET image_url = 'https://images.unsplash.com/photo-1519415387722-a1c3bbef716c?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' WHERE name = 'Threading';
 

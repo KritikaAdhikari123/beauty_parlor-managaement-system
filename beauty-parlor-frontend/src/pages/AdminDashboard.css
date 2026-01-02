@@ -2,29 +2,27 @@
   max-width: 1600px;
   margin: 0 auto;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #fff5f8 0%, #fef0f5 50%, #fff8fb 100%);
+  background: transparent;
   min-height: 100vh;
 }
 
 .admin-header {
   text-align: center;
   margin-bottom: 50px;
-  padding: 30px;
+  padding: 40px 30px;
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(183, 110, 121, 0.12);
 }
 
 .admin-header h1 {
   margin-bottom: 10px;
-  color: #d63384;
+  color: #2b2b2b;
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.5px;
 }
 
 .admin-subtitle {
@@ -63,12 +61,13 @@
   background: white;
   padding: 30px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   text-align: center;
-  border: 1px solid rgba(214, 51, 132, 0.1);
+  border: 1px solid rgba(183, 110, 121, 0.12);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  /* font-weight: 1000; */
 }
 
 .stat-card::before {
@@ -78,12 +77,13 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: linear-gradient(90deg, #d63384 0%, #c2185b 100%);
+  background: linear-gradient(90deg, #b76e79 0%, #8e5a6a 100%);
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(214, 51, 132, 0.25);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: rgba(183, 110, 121, 0.25);
 }
 
 .stat-icon {
@@ -99,26 +99,26 @@
 
 .stat-number {
   font-size: 3rem;
-  font-weight: bold;
-  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  color: #8e5a6a;
+  font-family: 'Poppins', sans-serif;
 }
 
 .filters-section {
   background: white;
   padding: 30px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(183, 110, 121, 0.12);
   margin-bottom: 30px;
 }
 
 .filters-section h2 {
   font-family: 'Playfair Display', serif;
-  color: #d63384;
+  color: #2b2b2b;
   margin-bottom: 20px;
   font-size: 1.8rem;
+  letter-spacing: 0.3px;
 }
 
 .filters {
@@ -140,23 +140,25 @@
 .filters select:focus,
 .filters input:focus {
   outline: none;
-  border-color: #d63384;
-  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+  border-color: #b76e79;
+  box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
 }
 
 .appointments-section {
   background: white;
   padding: 35px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
-  border: 1px solid rgba(214, 51, 132, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(183, 110, 121, 0.12);
 }
 
 .appointments-section h2 {
   margin-bottom: 25px;
-  color: #d63384;
+  color: #2b2b2b;
   font-size: 1.8rem;
   font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.3px;
 }
 
 .appointments-table {
@@ -185,7 +187,7 @@
 }
 
 .appointments-table th {
-  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
+  background: linear-gradient(135deg, #8e5a6a 0%, #6d4a55 100%);
   font-weight: 600;
   color: white;
   padding: 18px;
@@ -218,7 +220,7 @@
 }
 
 .appointments-table tr:hover {
-  background: linear-gradient(135deg, #fff5f8 0%, #fef0f5 100%);
+  background: rgba(250, 248, 246, 0.5);
 }
 
 .customer-info {

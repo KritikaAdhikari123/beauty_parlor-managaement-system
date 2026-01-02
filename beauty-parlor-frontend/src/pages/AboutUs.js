@@ -4,8 +4,10 @@ function AboutUs() {
   return (
     <div className="about-us-page">
       <div className="about-hero">
-        <h1>✨ About Sujita Beauty Parlour</h1>
-        <p className="tagline">Your Trusted Destination for Beauty & Wellness</p>
+        <div className="about-hero-content">
+          <h1>About Sujita Beauty Parlour</h1>
+          <p className="tagline">Your Trusted Destination for Beauty & Wellness</p>
+        </div>
       </div>
 
       <div className="about-content">

@@ -23,8 +23,10 @@ function ContactUs() {
   return (
     <div className="contact-us-page">
       <div className="contact-hero">
-        <h1>✨ Contact Sujita Beauty Parlour</h1>
-        <p className="tagline">We'd love to hear from you!</p>
+        <div className="contact-hero-content">
+          <h1>Contact Sujita Beauty Parlour</h1>
+          <p className="tagline">We'd love to hear from you!</p>
+        </div>
       </div>
 
       <div className="contact-content">

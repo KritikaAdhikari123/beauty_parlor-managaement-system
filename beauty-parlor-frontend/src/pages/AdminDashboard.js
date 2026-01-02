@@ -119,7 +119,7 @@ function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <div className="admin-header">
-        <h1>✨ Sujita Beauty Parlour - Admin Dashboard</h1>
+        <h1>Sujita Beauty Parlour - Admin Dashboard</h1>
         <p className="admin-subtitle">Manage bookings, services, and staff</p>
       </div>
 
@@ -132,23 +132,19 @@ function AdminDashboard() {
       {stats && (
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-icon">📊</div>
-            <h3>Total Bookings</h3>
+            <h2>Total Bookings</h2>
             <p className="stat-number">{stats.totalBookings}</p>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">⏰</div>
-            <h3>Pending Confirmation</h3>
+            <h2>Pending Confirmation</h2>
             <p className="stat-number">{appointments.filter(a => a.status === 'PENDING').length}</p>
           </div>
           <div className="stat-card">
-            <div className="stat-icon">✅</div>
-            <h3>Confirmed</h3>
+            <h2>Confirmed</h2>
             <p className="stat-number">{appointments.filter(a => a.status === 'CONFIRMED').length}</p>
           </div>
-          <div className="stat-card">
-            <div className="stat-icon">❌</div>
-            <h3>Cancellation Requests</h3>
+          <div className="stat-card"> 
+            <h2>Cancellation Requests</h2>
             <p className="stat-number">{appointments.filter(a => a.status === 'CANCEL_REQUESTED').length}</p>
           </div>
         </div>

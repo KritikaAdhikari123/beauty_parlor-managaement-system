@@ -36,7 +36,7 @@ function Services() {
       <Hero />
       <div className="services-page" id="services">
         <div className="services-header">
-          <h1>✨ Our Premium Services</h1>
+          <h1>Our Premium Services</h1>
           <p>Indulge in luxury and choose a service to book your appointment</p>
         </div>
         <div className="services-grid">

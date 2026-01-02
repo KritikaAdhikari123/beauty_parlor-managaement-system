@@ -3,36 +3,33 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5e6f0 0%, #e8d5e8 25%, #d4c4e8 50%, #c8b4e0 75%, #b8a4d8 100%);
+  background: linear-gradient(135deg, #faf8f6 0%, #fdf6f8 30%, #f7f7f4 60%, #ffffff 100%);
   position: relative;
   overflow: hidden;
+  padding: 20px;
 }
 
 .login-container::before {
   content: '';
   position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(214, 51, 132, 0.1) 0%, transparent 70%);
-  animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  50% { transform: translate(-30px, -30px) rotate(180deg); }
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1920&q=80') center/cover;
+  opacity: 0.05;
+  z-index: 0;
 }
 
 .login-card {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   padding: 50px 40px;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(214, 51, 132, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
   width: 100%;
   max-width: 450px;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(183, 110, 121, 0.15);
   position: relative;
   z-index: 1;
 }
@@ -40,13 +37,11 @@
 .login-card h2 {
   margin-bottom: 10px;
   text-align: center;
-  color: #d63384;
-  font-size: 2rem;
+  color: #2b2b2b;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 0.5px;
 }
 
 .form-group {
@@ -72,9 +67,9 @@
 
 .form-group input:focus {
   outline: none;
-  border-color: #d63384;
+  border-color: #b76e79;
   background: white;
-  box-shadow: 0 0 0 3px rgba(214, 51, 132, 0.1);
+  box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
 }
 
 .register-link {
@@ -84,14 +79,14 @@
 }
 
 .register-link a {
-  color: #d63384;
+  color: #8e5a6a;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s ease;
 }
 
 .register-link a:hover {
-  color: #c2185b;
+  color: #b76e79;
   text-decoration: underline;
 }
 

@@ -18,7 +18,7 @@ function Navbar() {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          ✨ Sujita Beauty Parlour
+          Sujita Beauty Parlour
         </Link>
         <div className="nav-links">
           <Link to="/services">Services</Link>

@@ -7,19 +7,35 @@
 .about-hero {
   text-align: center;
   margin-bottom: 60px;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, #f5e6f0 0%, #f0e8f5 100%);
-  border-radius: 20px;
+  padding: 60px 40px;
+  background: url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1920&q=80') center/cover;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(250, 248, 246, 0.95) 0%, rgba(255, 255, 255, 0.92) 100%);
+  z-index: 1;
+}
+
+.about-hero-content {
+  position: relative;
+  z-index: 2;
 }
 
 .about-hero h1 {
   font-size: 3rem;
-  color: #d63384;
+  color: #2b2b2b;
   margin-bottom: 15px;
-  background: linear-gradient(135deg, #d63384 0%, #c2185b 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
 }
 
 .tagline {
@@ -38,14 +54,16 @@
   background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(214, 51, 132, 0.15);
-  border: 1px solid rgba(214, 51, 132, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(183, 110, 121, 0.12);
 }
 
 .about-section h2 {
-  color: #d63384;
+  color: #2b2b2b;
   margin-bottom: 20px;
   font-size: 2rem;
+  font-family: 'Playfair Display', serif;
+  letter-spacing: 0.3px;
 }
 
 .about-section p {
@@ -63,17 +81,19 @@
 }
 
 .feature-card {
-  background: linear-gradient(135deg, #f5e6f0 0%, #f0e8f5 100%);
+  background: rgba(250, 248, 246, 0.6);
   padding: 30px;
-  border-radius: 15px;
+  border-radius: 16px;
   text-align: center;
-  border: 1px solid rgba(214, 51, 132, 0.2);
+  border: 1px solid rgba(183, 110, 121, 0.15);
   transition: all 0.3s ease;
 }
 
 .feature-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(214, 51, 132, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: rgba(183, 110, 121, 0.25);
+  background: white;
 }
 
 .feature-icon {
@@ -82,9 +102,10 @@
 }
 
 .feature-card h3 {
-  color: #d63384;
+  color: #2b2b2b;
   margin-bottom: 10px;
   font-size: 1.3rem;
+  font-family: 'Playfair Display', serif;
 }
 
 .feature-card p {
@@ -108,10 +129,12 @@
 }
 
 .services-list li::before {
-  content: "✨";
+  content: "•";
   position: absolute;
   left: 0;
-  color: #d63384;
+  color: #8e5a6a;
+  font-size: 1.5rem;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {

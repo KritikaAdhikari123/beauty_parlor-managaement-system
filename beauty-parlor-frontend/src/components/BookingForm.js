@@ -93,7 +93,7 @@ function BookingForm() {
   return (
     <div className="booking-form-container">
       <div className="booking-form-card">
-        <h2>✨ Book {service.name}</h2>
+        <h2>Book {service.name}</h2>
         <div className="service-info">
           <p><strong>Price:</strong> Rs. {service.price_npr}</p>
           <p><strong>Duration:</strong> {service.duration} minutes</p>

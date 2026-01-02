@@ -8,6 +8,10 @@ function Login() {
   const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  // Get redirect path from URL params
+  const searchParams = new URLSearchParams(window.location.search);
+  const redirectPath = searchParams.get('redirect') || null;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,7 +28,8 @@ function Login() {
       if (result.user.role === "admin") {
         navigate("/admin/dashboard");
       } else {
-        navigate("/user/services");
+        // Redirect to the path user was trying to access, or default to services
+        navigate(redirectPath || "/user/services");
       }
     } else {
       setError(result.message);

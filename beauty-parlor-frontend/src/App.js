@@ -10,6 +10,8 @@ import Services from "./pages/Services";
 import BookingForm from "./components/BookingForm";
 import BookingHistory from "./pages/BookingHistory";
 import AdminDashboard from "./pages/AdminDashboard";
+import AboutUs from "./pages/AboutUs";
+import ContactUs from "./pages/ContactUs";
 
 import "./styles.css";
 
@@ -22,6 +24,13 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           
+          {/* Public Pages */}
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/" element={<Navigate to="/services" replace />} />
+          
+          {/* Protected User Routes */}
           <Route
             path="/user/services"
             element={
@@ -56,7 +65,6 @@ function App() {
             }
           />
           
-          <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

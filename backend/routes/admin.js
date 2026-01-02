@@ -14,21 +14,23 @@ router.get('/dashboard', authenticate, authorizeAdmin, async (req, res) => {
     // Upcoming appointments
     const [upcoming] = await db.execute(
       `SELECT COUNT(*) as count FROM bookings 
-       WHERE status = 'confirmed' AND booking_date >= CURDATE()`
+       WHERE status = 'CONFIRMED' AND booking_date >= CURDATE()`
     );
 
     // Cancelled appointments
     const [cancelled] = await db.execute(
       `SELECT COUNT(*) as count FROM bookings 
-       WHERE status = 'cancelled'`
+       WHERE status = 'CANCELLED'`
     );
 
     // Recent bookings
     const [recentBookings] = await db.execute(
-      `SELECT b.*, s.name as service_name, s.price_npr, u.name as user_name, u.email as user_email
+      `SELECT b.*, s.name as service_name, s.price_npr, u.name as user_name, u.email as user_email,
+              st.name as stylist_name
        FROM bookings b
        JOIN services s ON b.service_id = s.id
        JOIN users u ON b.user_id = u.id
+       LEFT JOIN staff st ON b.stylist_id = st.id
        ORDER BY b.created_at DESC
        LIMIT 10`
     );
@@ -79,7 +81,22 @@ router.get('/appointments', authenticate, authorizeAdmin, async (req, res) => {
     query += ' ORDER BY b.booking_date DESC, b.time_slot DESC';
 
     const [appointments] = await db.execute(query, params);
-    res.json({ success: true, data: appointments });
+    
+    // Include stylist information
+    const appointmentsWithStylist = await Promise.all(
+      appointments.map(async (apt) => {
+        if (apt.stylist_id) {
+          const [stylists] = await db.execute(
+            'SELECT name FROM staff WHERE id = ?',
+            [apt.stylist_id]
+          );
+          apt.stylist_name = stylists.length > 0 ? stylists[0].name : null;
+        }
+        return apt;
+      })
+    );
+    
+    res.json({ success: true, data: appointmentsWithStylist });
   } catch (error) {
     console.error('Get appointments error:', error);
     res.status(500).json({ success: false, message: 'Error fetching appointments' });

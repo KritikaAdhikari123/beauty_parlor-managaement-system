@@ -12,7 +12,7 @@ function Navbar() {
     navigate("/login");
   };
 
-  if (!user) return null;
+  // Show navbar even when not logged in, but with limited options
 
   return (
     <nav className="navbar">
@@ -21,20 +21,31 @@ function Navbar() {
           ✨ Sujita Beauty Parlour
         </Link>
         <div className="nav-links">
-          {user.role === "admin" ? (
+          <Link to="/services">Services</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+          {user ? (
             <>
-              <Link to="/admin/dashboard">Dashboard</Link>
+              {user.role === "admin" ? (
+                <>
+                  <Link to="/admin/dashboard">Dashboard</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/user/bookings">My Bookings</Link>
+                </>
+              )}
+              <span className="user-name">{user.name}</span>
+              <button onClick={handleLogout} className="btn-logout">
+                Logout
+              </button>
             </>
           ) : (
             <>
-              <Link to="/user/services">Services</Link>
-              <Link to="/user/bookings">My Bookings</Link>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
             </>
           )}
-          <span className="user-name">{user.name}</span>
-          <button onClick={handleLogout} className="btn-logout">
-            Logout
-          </button>
         </div>
       </div>
     </nav>

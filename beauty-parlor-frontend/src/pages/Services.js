@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getServices } from "../services/api";
 import ServiceCard from "../components/ServiceCard";
+import Hero from "../components/Hero";
 import "./Services.css";
 
 function Services() {
@@ -31,24 +32,34 @@ function Services() {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="services-page">
-      <div className="services-header">
-        <h1>✨ Our Premium Services</h1>
-        <p>Indulge in luxury and choose a service to book your appointment</p>
+    <>
+      <Hero />
+      <div className="services-page" id="services">
+        <div className="services-header">
+          <h1>✨ Our Premium Services</h1>
+          <p>Indulge in luxury and choose a service to book your appointment</p>
+        </div>
+        <div className="services-grid">
+          {services.map((service) => (
+            <ServiceCard
+              key={service.id}
+              service={service}
+              onBook={() => {
+                const token = localStorage.getItem("token");
+                if (token) {
+                  navigate(`/user/book/${service.id}`);
+                } else {
+                  navigate(`/login?redirect=/user/book/${service.id}`);
+                }
+              }}
+            />
+          ))}
+        </div>
+        {services.length === 0 && (
+          <div className="no-services">No services available at the moment.</div>
+        )}
       </div>
-      <div className="services-grid">
-        {services.map((service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            onBook={() => navigate(`/user/book/${service.id}`)}
-          />
-        ))}
-      </div>
-      {services.length === 0 && (
-        <div className="no-services">No services available at the moment.</div>
-      )}
-    </div>
+    </>
   );
 }
 

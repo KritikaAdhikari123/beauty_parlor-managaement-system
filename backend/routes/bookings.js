@@ -1,7 +1,7 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const db = require('../config/database');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, authorizeAdmin } = require('../middleware/auth');
 const router = express.Router();
 
 // Create booking
@@ -36,9 +36,9 @@ router.post('/', authenticate, [
       });
     }
 
-    // Check for existing confirmed booking
+    // Check for existing CONFIRMED or PENDING booking
     const [existing] = await db.execute(
-      'SELECT id FROM bookings WHERE service_id = ? AND booking_date = ? AND time_slot = ? AND status = "confirmed"',
+      'SELECT id FROM bookings WHERE service_id = ? AND booking_date = ? AND time_slot = ? AND status IN ("CONFIRMED", "PENDING")',
       [service_id, booking_date, time_slot]
     );
 
@@ -49,17 +49,14 @@ router.post('/', authenticate, [
       });
     }
 
-    // Create booking
+    // Create booking with PENDING status (REQUIRES admin confirmation - DO NOT mark slot unavailable yet)
+    const { stylist_id } = req.body;
     const [result] = await db.execute(
-      'INSERT INTO bookings (user_id, service_id, booking_date, time_slot, status) VALUES (?, ?, ?, ?, ?)',
-      [user_id, service_id, booking_date, time_slot, 'confirmed']
+      'INSERT INTO bookings (user_id, service_id, stylist_id, booking_date, time_slot, status) VALUES (?, ?, ?, ?, ?, ?)',
+      [user_id, service_id, stylist_id || null, booking_date, time_slot, 'PENDING']
     );
 
-    // Mark slot as unavailable
-    await db.execute(
-      'UPDATE availability SET is_available = FALSE WHERE service_id = ? AND date = ? AND time_slot = ?',
-      [service_id, booking_date, time_slot]
-    );
+    // DO NOT mark slot as unavailable - wait for admin confirmation
 
     // Fetch complete booking details
     const [booking] = await db.execute(
@@ -82,9 +79,11 @@ router.post('/', authenticate, [
 router.get('/my-bookings', authenticate, async (req, res) => {
   try {
     const [bookings] = await db.execute(
-      `SELECT b.*, s.name as service_name, s.description, s.price_npr, s.duration
+      `SELECT b.*, s.name as service_name, s.description, s.price_npr, s.duration,
+              st.name as stylist_name
        FROM bookings b
        JOIN services s ON b.service_id = s.id
+       LEFT JOIN staff st ON b.stylist_id = st.id
        WHERE b.user_id = ?
        ORDER BY b.booking_date DESC, b.time_slot DESC`,
       [req.user.id]
@@ -123,22 +122,111 @@ router.put('/:id/cancel', authenticate, async (req, res) => {
       });
     }
 
-    // Update booking status
+    const { cancellation_reason } = req.body;
+
+    // Request cancellation (admin must approve) - only if status is PENDING or CONFIRMED
+    if (booking.status !== 'PENDING' && booking.status !== 'CONFIRMED') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Cannot request cancellation for this booking status' 
+      });
+    }
+
     await db.execute(
-      'UPDATE bookings SET status = "cancelled" WHERE id = ?',
-      [bookingId]
+      'UPDATE bookings SET status = "CANCEL_REQUESTED", cancellation_requested_at = NOW(), cancellation_reason = ? WHERE id = ?',
+      [cancellation_reason || null, bookingId]
     );
 
-    // Mark slot as available again
-    await db.execute(
-      'UPDATE availability SET is_available = TRUE WHERE service_id = ? AND date = ? AND time_slot = ?',
-      [booking.service_id, booking.booking_date, booking.time_slot]
-    );
-
-    res.json({ success: true, message: 'Booking cancelled successfully' });
+    res.json({ success: true, message: 'Cancellation request submitted. Waiting for admin approval.' });
   } catch (error) {
     console.error('Cancel booking error:', error);
     res.status(500).json({ success: false, message: 'Error cancelling booking' });
+  }
+});
+
+// Admin: Update booking status (ONLY ADMIN CAN CHANGE STATUS)
+router.put('/:id/status', authenticate, authorizeAdmin, [
+  body('status').isIn(['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED']).withMessage('Invalid status'),
+  body('stylist_id').optional().isInt()
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Validation error',
+        errors: errors.array() 
+      });
+    }
+
+    const { status, stylist_id } = req.body;
+    const bookingId = req.params.id;
+
+    // Get booking
+    const [bookings] = await db.execute(
+      'SELECT * FROM bookings WHERE id = ?',
+      [bookingId]
+    );
+
+    if (bookings.length === 0) {
+      return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    const booking = bookings[0];
+    const updates = ['status = ?'];
+    const values = [status];
+
+    if (stylist_id !== undefined) {
+      updates.push('stylist_id = ?');
+      values.push(stylist_id);
+    }
+
+    // If cancelling, mark slot as available
+    if (status === 'CANCELLED') {
+      await db.execute(
+        'UPDATE availability SET is_available = TRUE WHERE service_id = ? AND date = ? AND time_slot = ?',
+        [booking.service_id, booking.booking_date, booking.time_slot]
+      );
+    }
+
+    // If confirming PENDING booking, mark slot as unavailable
+    if (status === 'CONFIRMED' && booking.status === 'PENDING') {
+      await db.execute(
+        'UPDATE availability SET is_available = FALSE WHERE service_id = ? AND date = ? AND time_slot = ?',
+        [booking.service_id, booking.booking_date, booking.time_slot]
+      );
+    }
+
+    // If approving cancellation request, mark slot as available
+    if (status === 'CANCELLED' && booking.status === 'CANCEL_REQUESTED') {
+      await db.execute(
+        'UPDATE availability SET is_available = TRUE WHERE service_id = ? AND date = ? AND time_slot = ?',
+        [booking.service_id, booking.booking_date, booking.time_slot]
+      );
+    }
+
+    values.push(bookingId);
+    await db.execute(
+      `UPDATE bookings SET ${updates.join(', ')} WHERE id = ?`,
+      values
+    );
+
+    // Fetch updated booking
+    const [updated] = await db.execute(
+      `SELECT b.*, s.name as service_name, s.price_npr, u.name as user_name, u.email as user_email,
+              st.name as stylist_name
+       FROM bookings b
+       JOIN services s ON b.service_id = s.id
+       JOIN users u ON b.user_id = u.id
+       LEFT JOIN staff st ON b.stylist_id = st.id
+       WHERE b.id = ?`,
+      [bookingId]
+    );
+
+    res.json({ success: true, data: updated[0], message: 'Booking status updated successfully' });
+  } catch (error) {
+    console.error('Update booking status error:', error);
+    res.status(500).json({ success: false, message: 'Error updating booking status' });
   }
 });
 

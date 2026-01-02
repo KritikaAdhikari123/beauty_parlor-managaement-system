@@ -48,7 +48,7 @@ export const getAvailability = (serviceId, date) => {
 // Bookings
 export const createBooking = (data) => api.post("/bookings", data);
 export const getMyBookings = () => api.get("/bookings/my-bookings");
-export const cancelBooking = (id) => api.put(`/bookings/${id}/cancel`);
+export const cancelBooking = (id, data) => api.put(`/bookings/${id}/cancel`, data);
 
 // Admin
 export const getDashboard = () => api.get("/admin/dashboard");
@@ -62,3 +62,20 @@ export const deleteService = (id) => api.delete(`/services/${id}`);
 
 // Set availability (admin)
 export const setAvailability = (data) => api.post("/availability", data);
+
+// Staff
+export const getStaff = () => api.get("/staff");
+export const getStaffMember = (id) => api.get(`/staff/${id}`);
+export const createStaff = (data) => api.post("/staff", data);
+export const updateStaff = (id, data) => api.put(`/staff/${id}`, data);
+export const deleteStaff = (id) => api.delete(`/staff/${id}`);
+export const setStaffWorkingHours = (id, data) => api.post(`/staff/${id}/working-hours`, data);
+
+// Feedback
+export const getFeedback = (params) => api.get("/feedback", { params });
+export const createFeedback = (data) => api.post("/feedback", data);
+export const getMyFeedback = () => api.get("/feedback/my-feedback");
+export const updateFeedbackVisibility = (id, data) => api.put(`/feedback/${id}/visibility`, data);
+
+// Booking status (admin)
+export const updateBookingStatus = (id, data) => api.put(`/bookings/${id}/status`, data);

@@ -52,11 +52,11 @@ router.post('/', authenticate, authorizeAdmin, [
       });
     }
 
-    const { name, description, price_npr, duration } = req.body;
+    const { name, description, price_npr, duration, category, image_url } = req.body;
 
     const [result] = await db.execute(
-      'INSERT INTO services (name, description, price_npr, duration) VALUES (?, ?, ?, ?)',
-      [name, description || null, price_npr, duration]
+      'INSERT INTO services (name, description, category, price_npr, duration, image_url) VALUES (?, ?, ?, ?, ?, ?)',
+      [name, description || null, category || 'General', price_npr, duration, image_url || null]
     );
 
     const [service] = await db.execute(
@@ -87,12 +87,14 @@ router.put('/:id', authenticate, authorizeAdmin, [
       });
     }
 
-    const { name, description, price_npr, duration } = req.body;
+    const { name, description, price_npr, duration, category, image_url } = req.body;
     const updates = [];
     const values = [];
 
     if (name) { updates.push('name = ?'); values.push(name); }
     if (description !== undefined) { updates.push('description = ?'); values.push(description); }
+    if (category !== undefined) { updates.push('category = ?'); values.push(category); }
+    if (image_url !== undefined) { updates.push('image_url = ?'); values.push(image_url); }
     if (price_npr) { updates.push('price_npr = ?'); values.push(price_npr); }
     if (duration) { updates.push('duration = ?'); values.push(duration); }
 

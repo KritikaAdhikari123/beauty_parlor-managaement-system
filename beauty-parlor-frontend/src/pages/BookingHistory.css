@@ -66,13 +66,28 @@
   font-weight: 500;
 }
 
-.status.confirmed {
-  background-color: #4caf50;
+.status-pending {
+  background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
   color: white;
 }
 
-.status.cancelled {
-  background-color: #f44336;
+.status-confirmed {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+}
+
+.status-cancel-requested {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  color: white;
+}
+
+.status-cancelled {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  color: white;
+}
+
+.status-completed {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
   color: white;
 }
 
@@ -81,9 +96,9 @@
   color: #555;
 }
 
-.btn-cancel {
+.btn-cancel-request {
   margin-top: 15px;
-  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -91,12 +106,33 @@
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.3);
+  width: 100%;
 }
 
-.btn-cancel:hover {
+.btn-cancel-request:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+}
+
+.cancellation-reason {
+  background: #fff3e0;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 3px solid #ff9800;
+  margin-top: 10px;
+  font-style: italic;
+  color: #e65100;
+}
+
+.cancel-request-note {
+  margin-top: 15px;
+  padding: 12px;
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border-radius: 10px;
+  color: #e65100;
+  font-weight: 500;
+  text-align: center;
 }
 
 .no-bookings {

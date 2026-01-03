@@ -11,6 +11,7 @@ function AdminDashboard() {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [message, setMessage] = useState("");
+  const [updatingBookingId, setUpdatingBookingId] = useState(null);
 
   useEffect(() => {
     fetchDashboard();
@@ -56,17 +57,72 @@ function AdminDashboard() {
   };
 
   const handleStatusChange = async (bookingId, newStatus, stylistId = null) => {
+    // Disable button and show loading
+    setUpdatingBookingId(bookingId);
+    setMessage("");
+
+    // Prepare payload
+    const payload = { status: newStatus };
+    if (stylistId) {
+      payload.stylist_id = stylistId;
+    }
+
+    console.log('Updating booking:', { bookingId, payload });
+
+    // Optimistic update: Update UI immediately
+    setAppointments(prevAppointments => 
+      prevAppointments.map(apt => 
+        apt.id === bookingId 
+          ? { ...apt, status: newStatus, stylist_id: stylistId || apt.stylist_id }
+          : apt
+      )
+    );
+
     try {
-      await updateBookingStatus(bookingId, { status: newStatus, stylist_id: stylistId });
-      setMessage(`Booking status updated to ${newStatus}`);
-      setShowStatusModal(false);
-      setSelectedBooking(null);
-      fetchAppointments();
-      fetchDashboard();
+      const response = await updateBookingStatus(bookingId, payload);
+      console.log('Update booking response:', response.data);
+      
+      // Use the updated booking from API response if available, otherwise keep optimistic update
+      const updatedBooking = response.data?.booking || response.data?.data || response.data;
+      if (updatedBooking) {
+        setAppointments(prevAppointments => 
+          prevAppointments.map(apt => 
+            apt.id === bookingId ? { ...apt, ...updatedBooking } : apt
+          )
+        );
+      }
+
+      // Show success message
+      const statusLabel = getStatusLabel(newStatus);
+      setMessage(`✅ Booking status updated to ${statusLabel} successfully`);
+      
+      // Refresh dashboard stats and appointments list
+      await Promise.all([fetchDashboard(), fetchAppointments()]);
+      
+      // Clear message after 3 seconds
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Failed to update booking status");
+      console.error('Error updating booking status:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      // Revert optimistic update on error by refetching appointments
+      fetchAppointments();
+      
+      // Show error message with detailed info
+      let errorMsg = "Failed to update booking status. Please try again.";
+      if (err.response?.data) {
+        if (err.response.data.errors && Array.isArray(err.response.data.errors)) {
+          errorMsg = err.response.data.errors.map(e => e.msg || e.message).join(', ');
+        } else {
+          errorMsg = err.response.data.message || err.response.data.error || errorMsg;
+        }
+      }
+      setMessage(`❌ ${errorMsg}`);
       setTimeout(() => setMessage(""), 5000);
+    } finally {
+      // Re-enable button
+      setUpdatingBookingId(null);
     }
   };
 
@@ -124,7 +180,7 @@ function AdminDashboard() {
       </div>
 
       {message && (
-        <div className={`admin-message ${message.includes('Failed') ? 'error' : 'success'}`}>
+        <div className={`admin-message ${message.includes('Failed') || message.includes('❌') || message.includes('Error') ? 'error' : 'success'}`}>
           {message}
         </div>
       )}
@@ -237,15 +293,19 @@ function AdminDashboard() {
                       <td>
                         <div className="action-buttons">
                           {actions.length > 0 ? (
-                            actions.map((action, idx) => (
-                              <button
-                                key={idx}
-                                className={`btn-action btn-${action.color}`}
-                                onClick={() => handleStatusChange(apt.id, action.status)}
-                              >
-                                {action.label}
-                              </button>
-                            ))
+                            actions.map((action, idx) => {
+                              const isUpdating = updatingBookingId === apt.id;
+                              return (
+                                <button
+                                  key={idx}
+                                  className={`btn-action btn-${action.color}`}
+                                  onClick={() => handleStatusChange(apt.id, action.status)}
+                                  disabled={isUpdating}
+                                >
+                                  {isUpdating ? "Updating..." : action.label}
+                                </button>
+                              );
+                            })
                           ) : (
                             <span className="no-actions">No actions</span>
                           )}

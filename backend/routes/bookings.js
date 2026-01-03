@@ -146,12 +146,19 @@ router.put('/:id/cancel', authenticate, async (req, res) => {
 
 // Admin: Update booking status (ONLY ADMIN CAN CHANGE STATUS)
 router.put('/:id/status', authenticate, authorizeAdmin, [
-  body('status').isIn(['PENDING', 'CONFIRMED', 'CANCELLED', 'COMPLETED']).withMessage('Invalid status'),
-  body('stylist_id').optional().isInt()
+  body('status')
+    .trim()
+    .notEmpty()
+    .withMessage('Status is required')
+    .isIn(['PENDING', 'CONFIRMED', 'CANCELLED', 'CANCEL_REQUESTED', 'COMPLETED'])
+    .withMessage('Invalid status. Must be one of: PENDING, CONFIRMED, CANCELLED, CANCEL_REQUESTED, COMPLETED'),
+  body('stylist_id').optional({ nullable: true, checkFalsy: true }).isInt().withMessage('Stylist ID must be an integer')
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.error('Validation errors:', errors.array());
+      console.error('Request body:', req.body);
       return res.status(400).json({ 
         success: false, 
         message: 'Validation error',
@@ -161,6 +168,8 @@ router.put('/:id/status', authenticate, authorizeAdmin, [
 
     const { status, stylist_id } = req.body;
     const bookingId = req.params.id;
+
+    console.log(`Updating booking ${bookingId} to status: ${status}`);
 
     // Get booking
     const [bookings] = await db.execute(
@@ -223,10 +232,10 @@ router.put('/:id/status', authenticate, authorizeAdmin, [
       [bookingId]
     );
 
-    res.json({ success: true, data: updated[0], message: 'Booking status updated successfully' });
+    res.json({ success: true, message: 'Booking updated', booking: updated[0] });
   } catch (error) {
     console.error('Update booking status error:', error);
-    res.status(500).json({ success: false, message: 'Error updating booking status' });
+    res.status(500).json({ success: false, message: 'Error updating booking status', error: error.message });
   }
 });
 

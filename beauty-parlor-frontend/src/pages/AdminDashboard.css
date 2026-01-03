@@ -309,6 +309,13 @@
   font-family: 'Poppins', sans-serif;
 }
 
+.btn-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
 .btn-green {
   background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
   color: white;

@@ -39,7 +39,7 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2>✨ Sujita Beauty Parlour</h2>
+        <h2>Sujita Beauty Parlour</h2>
         <p style={{textAlign: 'center', color: '#666', marginBottom: '20px'}}>Welcome back! Please login to continue</p>
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit}>
@@ -49,7 +49,7 @@ function Login() {
               type="email"
               name="email"
               value={form.email}
-              onChange={handleChange}
+              onChange={handleChange} 
               required
               placeholder="Enter your email"
             />

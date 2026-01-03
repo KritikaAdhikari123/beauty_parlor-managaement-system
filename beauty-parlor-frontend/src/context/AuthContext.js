@@ -26,6 +26,11 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
+      // Clear any existing session before logging in (prevent multiple accounts)
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+
       const response = await authApi.post("/auth/login", {
         email,
         password
@@ -33,6 +38,7 @@ export const AuthProvider = ({ children }) => {
 
       const { token, user } = response.data;
       
+      // Store new session
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
@@ -48,6 +54,11 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
+      // Clear any existing session before registering (prevent multiple accounts)
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setUser(null);
+
       const response = await authApi.post("/auth/register", {
         name,
         email,
@@ -56,6 +67,7 @@ export const AuthProvider = ({ children }) => {
 
       const { token, user } = response.data;
       
+      // Store new session
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       setUser(user);
@@ -70,9 +82,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    // Clear all authentication data
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    // Note: Navigation is handled by the component calling logout
   };
 
   return (
